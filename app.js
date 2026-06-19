@@ -1,3 +1,5 @@
+let currentRepos = [];
+
 async function fetchGitHubData(username) {
     const userUrl = `https://api.github.com/users/${username}`;
     const reposUrl = `https://api.github.com/users/${username}/repos?per_page=100`;
@@ -34,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const loadingSpinner = document.getElementById("loading-spinner");
     const errorDisplay = document.getElementById("error-display");
     const profileCard = document.getElementById("profile-card");
+    const sortSelect = document.getElementById("sort-select");
 
     if (searchForm) {
         searchForm.addEventListener("submit", async (e) => {
@@ -50,6 +53,12 @@ document.addEventListener("DOMContentLoaded", () => {
             if (profileCard) {
                 profileCard.innerHTML = "";
             }
+            
+            // Also clear repository list
+            const repoList = document.getElementById("repo-list");
+            if (repoList) {
+                repoList.innerHTML = "";
+            }
 
             // Show loading spinner
             if (loadingSpinner) {
@@ -61,7 +70,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 console.log("GitHub data loaded successfully:", data);
                 
                 renderProfile(data.user);
-                renderRepos(data.repos);
+                currentRepos = data.repos;
+                sortAndRenderRepos();
             } catch (error) {
                 console.error("Fetch failed:", error);
                 if (errorDisplay) {
@@ -74,6 +84,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     loadingSpinner.style.display = "none";
                 }
             }
+        });
+    }
+
+    if (sortSelect) {
+        sortSelect.addEventListener("change", () => {
+            sortAndRenderRepos();
         });
     }
 });
@@ -163,4 +179,24 @@ function renderRepos(reposArray) {
     });
 
     repoList.appendChild(container);
+}
+
+/**
+ * Sorts currentRepos array based on dropdown value and re-renders them
+ */
+function sortAndRenderRepos() {
+    const sortSelect = document.getElementById("sort-select");
+    if (!sortSelect || !currentRepos) return;
+
+    const sortBy = sortSelect.value;
+
+    if (sortBy === "stars") {
+        currentRepos.sort((a, b) => b.stargazers_count - a.stargazers_count);
+    } else if (sortBy === "forks") {
+        currentRepos.sort((a, b) => b.forks_count - a.forks_count);
+    } else if (sortBy === "recent") {
+        currentRepos.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+    }
+
+    renderRepos(currentRepos);
 }
