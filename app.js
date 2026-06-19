@@ -60,6 +60,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 repoList.innerHTML = "";
             }
 
+            // Hide grid layout during loading
+            const gridLayout = document.querySelector(".grid-layout");
+            if (gridLayout) {
+                gridLayout.classList.remove("active");
+            }
+
             // Show loading spinner
             if (loadingSpinner) {
                 loadingSpinner.style.display = "block";
@@ -68,6 +74,10 @@ document.addEventListener("DOMContentLoaded", () => {
             try {
                 const data = await fetchGitHubData(username);
                 console.log("GitHub data loaded successfully:", data);
+                
+                if (gridLayout) {
+                    gridLayout.classList.add("active");
+                }
                 
                 renderProfile(data.user);
                 currentRepos = data.repos;

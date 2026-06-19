@@ -114,9 +114,13 @@ body {
 
 /* Base Responsive Grid (Stacking on mobile by default) */
 .grid-layout {
-    display: grid;
+    display: none;
     grid-template-columns: 1fr;
     gap: 30px;
+}
+
+.grid-layout.active {
+    display: grid;
 }
 
 /* Sidebar & Repos grids */
@@ -140,6 +144,10 @@ body {
     box-shadow: var(--box-shadow);
     padding: 24px;
     min-height: 100px;
+}
+
+.card:empty {
+    display: none;
 }
 
 /* Repositories Header & Sorting */
@@ -213,4 +221,16 @@ body {
     .search-form {
         width: 350px;
     }
+}
+
+/* Error Display Styles */
+.error-display {
+    background-color: #ffebe9;
+    color: #cf222e;
+    border: 1px solid rgba(207, 34, 46, 0.2);
+    padding: 16px;
+    border-radius: var(--border-radius);
+    text-align: center;
+    font-weight: 500;
+    margin-bottom: 24px;
 }
