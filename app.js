@@ -37,6 +37,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const errorDisplay = document.getElementById("error-display");
     const profileCard = document.getElementById("profile-card");
     const sortSelect = document.getElementById("sort-select");
+    const welcomeContainer = document.getElementById("welcome-container");
+    const logo = document.querySelector(".logo");
 
     if (searchForm) {
         searchForm.addEventListener("submit", async (e) => {
@@ -58,6 +60,11 @@ document.addEventListener("DOMContentLoaded", () => {
             const repoList = document.getElementById("repo-list");
             if (repoList) {
                 repoList.innerHTML = "";
+            }
+
+            // Hide welcome container when search starts
+            if (welcomeContainer) {
+                welcomeContainer.classList.add("hidden");
             }
 
             // Hide grid layout during loading
@@ -94,6 +101,48 @@ document.addEventListener("DOMContentLoaded", () => {
                     loadingSpinner.style.display = "none";
                 }
             }
+        });
+    }
+
+    // Set up click events for suggested developers
+    const developerCards = document.querySelectorAll(".developer-card");
+    developerCards.forEach(card => {
+        card.addEventListener("click", () => {
+            const username = card.getAttribute("data-username");
+            if (username && usernameInput) {
+                usernameInput.value = username;
+                if (searchForm) {
+                    const event = new Event("submit", { cancelable: true });
+                    searchForm.dispatchEvent(event);
+                }
+            }
+        });
+    });
+
+    // Reset view to landing page when logo is clicked
+    if (logo) {
+        logo.addEventListener("click", () => {
+            if (usernameInput) {
+                usernameInput.value = "";
+            }
+            if (errorDisplay) {
+                errorDisplay.style.display = "none";
+                errorDisplay.textContent = "";
+            }
+            if (loadingSpinner) {
+                loadingSpinner.style.display = "none";
+            }
+            
+            const gridLayout = document.querySelector(".grid-layout");
+            if (gridLayout) {
+                gridLayout.classList.remove("active");
+            }
+
+            if (welcomeContainer) {
+                welcomeContainer.classList.remove("hidden");
+            }
+            
+            currentRepos = [];
         });
     }
 

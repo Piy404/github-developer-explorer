@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GitHub Developer Explorer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="app.js" defer></script>
 </head>
@@ -23,6 +26,73 @@
         <div id="error-display" class="error-display" style="display: none;"></div>
         <div id="loading-spinner" class="loading-spinner" style="display: none;"></div>
         
+        <!-- Welcome/Landing State -->
+        <div id="welcome-container" class="welcome-container">
+            <section class="hero-section">
+                <h2 class="hero-title">Explore the GitHub Universe</h2>
+                <p class="hero-subtitle">Search for any developer profile, analyze language stats, and browse repositories instantly.</p>
+            </section>
+
+            <section class="featured-section">
+                <h3 class="section-title">Popular Developers</h3>
+                <div class="featured-grid">
+                    <div class="developer-card" data-username="torvalds">
+                        <img src="https://github.com/torvalds.png" alt="Linus Torvalds" class="dev-avatar">
+                        <div class="dev-info">
+                            <h4>Linus Torvalds</h4>
+                            <p class="dev-username">@torvalds</p>
+                            <p class="dev-desc">Creator of Linux & Git</p>
+                        </div>
+                    </div>
+                    <div class="developer-card" data-username="gaearon">
+                        <img src="https://github.com/gaearon.png" alt="Dan Abramov" class="dev-avatar">
+                        <div class="dev-info">
+                            <h4>Dan Abramov</h4>
+                            <p class="dev-username">@gaearon</p>
+                            <p class="dev-desc">Co-creator of Redux</p>
+                        </div>
+                    </div>
+                    <div class="developer-card" data-username="yyx990803">
+                        <img src="https://github.com/yyx990803.png" alt="Evan You" class="dev-avatar">
+                        <div class="dev-info">
+                            <h4>Evan You</h4>
+                            <p class="dev-username">@yyx990803</p>
+                            <p class="dev-desc">Creator of Vue.js & Vite</p>
+                        </div>
+                    </div>
+                    <div class="developer-card" data-username="tj">
+                        <img src="https://github.com/tj.png" alt="TJ Holowaychuk" class="dev-avatar">
+                        <div class="dev-info">
+                            <h4>TJ Holowaychuk</h4>
+                            <p class="dev-username">@tj</p>
+                            <p class="dev-desc">Creator of Apex, Commander</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="capabilities-section">
+                <h3 class="section-title">What You Can Do</h3>
+                <div class="capabilities-grid">
+                    <div class="capability-card">
+                        <div class="cap-icon">📊</div>
+                        <h4>Visual Stats</h4>
+                        <p>Analyze profile metrics and language stats dynamically.</p>
+                    </div>
+                    <div class="capability-card">
+                        <div class="cap-icon">📁</div>
+                        <h4>Repo Explorer</h4>
+                        <p>Browse full public repositories sorted by stars, forks, or updates.</p>
+                    </div>
+                    <div class="capability-card">
+                        <div class="cap-icon">⚡</div>
+                        <h4>Fast Search</h4>
+                        <p>Enter any GitHub handle to fetch real-time profile data via the GitHub API.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
         <div class="grid-layout">
             
             <div class="sidebar-grid">
