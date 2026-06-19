@@ -215,3 +215,27 @@ function calculateLanguages(reposArray) {
     }, {});
     return languageCounts;
 }
+
+/**
+ * Transforms language frequency counts into sorted stats with percentages
+ * @param {Array} reposArray - Array of repository objects
+ * @returns {Object} Array of sorted stats and total language count
+ */
+function getLanguageStats(reposArray) {
+    const counts = calculateLanguages(reposArray);
+    const pairs = Object.entries(counts);
+    pairs.sort((a, b) => b[1] - a[1]);
+
+    const total = pairs.reduce((sum, pair) => sum + pair[1], 0);
+
+    const stats = pairs.map(pair => {
+        const percentage = total > 0 ? ((pair[1] / total) * 100) : 0;
+        return {
+            language: pair[0],
+            count: pair[1],
+            percentage: percentage
+        };
+    });
+
+    return { stats, total };
+}
