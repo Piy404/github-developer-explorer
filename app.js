@@ -61,6 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 console.log("GitHub data loaded successfully:", data);
                 
                 renderProfile(data.user);
+                renderRepos(data.repos);
             } catch (error) {
                 console.error("Fetch failed:", error);
                 if (errorDisplay) {
@@ -100,4 +101,66 @@ function renderProfile(userData) {
             <a href="${userData.html_url}" target="_blank" rel="noopener noreferrer" class="btn" style="width: 100%; text-align: center; text-decoration: none;">View GitHub Profile</a>
         </div>
     `;
+}
+
+/**
+ * Renders the repositories list dynamically inside #repo-list
+ * @param {Array} reposArray - Array of GitHub repository objects
+ */
+function renderRepos(reposArray) {
+    const repoList = document.getElementById("repo-list");
+    if (!repoList) return;
+
+    repoList.innerHTML = "";
+
+    if (!reposArray || reposArray.length === 0) {
+        repoList.innerHTML = `
+            <div class="no-repos" style="text-align: center; padding: 40px; color: var(--text-muted);">
+                No public repositories found.
+            </div>
+        `;
+        return;
+    }
+
+    const container = document.createElement("div");
+    container.style.display = "flex";
+    container.style.flexDirection = "column";
+    container.style.gap = "16px";
+
+    reposArray.forEach(repo => {
+        const repoCard = document.createElement("div");
+        repoCard.className = "card repo-card";
+        repoCard.style.display = "flex";
+        repoCard.style.flexDirection = "column";
+        repoCard.style.gap = "10px";
+        repoCard.style.padding = "20px";
+        repoCard.style.borderRadius = "var(--border-radius)";
+        repoCard.style.border = "1px solid var(--border-color)";
+        repoCard.style.boxShadow = "var(--box-shadow)";
+        repoCard.style.backgroundColor = "var(--card-bg)";
+
+        const nameHTML = `<a href="${repo.html_url}" target="_blank" rel="noopener noreferrer" style="font-weight: 700; color: var(--primary-color); font-size: 1.1rem; text-decoration: none; width: fit-content;">${repo.name}</a>`;
+        const descHTML = `<p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.4; margin: 4px 0;">${repo.description || "No description available."}</p>`;
+        
+        const stars = repo.stargazers_count || 0;
+        const forks = repo.forks_count || 0;
+        const language = repo.language || "Unknown";
+
+        const statsHTML = `
+            <div style="display: flex; gap: 16px; font-size: 0.85rem; color: var(--text-muted); font-weight: 500;">
+                <span style="display: flex; align-items: center; gap: 4px;">⭐ ${stars}</span>
+                <span style="display: flex; align-items: center; gap: 4px;">🍴 ${forks}</span>
+                <span style="display: flex; align-items: center; gap: 4px;">💻 ${language}</span>
+            </div>
+        `;
+
+        repoCard.innerHTML = `
+            ${nameHTML}
+            ${descHTML}
+            ${statsHTML}
+        `;
+        container.appendChild(repoCard);
+    });
+
+    repoList.appendChild(container);
 }
