@@ -8,20 +8,40 @@
     <script src="app.js" defer></script>
 </head>
 <body>
-    <div class="app-container">
-        <header class="app-header">
-            <h1>GitHub Developer Explorer</h1>
+    <header class="main-header">
+        <div class="header-container">
+            <h1 class="logo">DevExplorer.</h1>
+            
             <form id="search-form" class="search-form">
                 <input type="text" id="username-input" placeholder="Enter GitHub username..." required />
                 <button type="submit" class="btn">Search</button>
             </form>
-        </header>
+        </div>
+    </header>
 
-        <main class="app-main">
-            <div id="loading-spinner" class="loading-spinner" style="display: none;"></div>
-            <div id="error-display" class="error-display" style="display: none;"></div>
-            <div id="profile-container" class="profile-container"></div>
-        </main>
-    </div>
+    <main class="main-content">
+        <div id="error-display" class="error-display" style="display: none;"></div>
+        <div id="loading-spinner" class="loading-spinner" style="display: none;"></div>
+        
+        <div class="grid-layout">
+            
+            <div class="sidebar-grid">
+                <div id="profile-card" class="card"></div>
+                <div id="language-stats" class="card"></div>
+            </div>
+
+            <div class="content-grid">
+                <div class="sort-controls">
+                    <select id="sort-dropdown">
+                        <option value="stars">Highest Stars</option>
+                        <option value="forks">Highest Forks</option>
+                        <option value="recent">Recently Updated</option>
+                    </select>
+                </div>
+                <div id="repo-list" class="repo-list"></div>
+            </div>
+            
+        </div>
+    </main>
 </body>
 </html>
