@@ -53,6 +53,10 @@ document.addEventListener("DOMContentLoaded", () => {
             if (profileCard) {
                 profileCard.innerHTML = "";
             }
+            const languageStats = document.getElementById("language-stats");
+            if (languageStats) {
+                languageStats.innerHTML = "";
+            }
             
             // Also clear repository list
             const repoList = document.getElementById("repo-list");
@@ -72,6 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 renderProfile(data.user);
                 currentRepos = data.repos;
                 sortAndRenderRepos();
+                renderLanguageStats(data.repos);
             } catch (error) {
                 console.error("Fetch failed:", error);
                 if (errorDisplay) {
@@ -199,4 +204,120 @@ function sortAndRenderRepos() {
     }
 
     renderRepos(currentRepos);
+}
+
+/**
+ * Calculates the language frequencies in a repositories array
+ * @param {Array} reposArray - Array of repository objects
+ * @returns {Object} Language frequency tallies
+ */
+function calculateLanguages(reposArray) {
+    const languageCounts = reposArray.reduce((acc, repo) => {
+        if (repo.language) {
+            acc[repo.language] = (acc[repo.language] || 0) + 1;
+        }
+        return acc;
+    }, {});
+    return languageCounts;
+}
+
+/**
+ * Transforms language frequency counts into sorted stats with percentages
+ * @param {Array} reposArray - Array of repository objects
+ * @returns {Object} Array of sorted stats and total language count
+ */
+function getLanguageStats(reposArray) {
+    const counts = calculateLanguages(reposArray);
+    const pairs = Object.entries(counts);
+    pairs.sort((a, b) => b[1] - a[1]);
+
+    const total = pairs.reduce((sum, pair) => sum + pair[1], 0);
+
+    const stats = pairs.map(pair => {
+        const percentage = total > 0 ? ((pair[1] / total) * 100) : 0;
+        return {
+            language: pair[0],
+            count: pair[1],
+            percentage: percentage
+        };
+    });
+
+    return { stats, total };
+}
+
+/**
+ * Renders the language breakdown stats inside #language-stats
+ * @param {Array} reposArray - Array of repository objects
+ */
+function renderLanguageStats(reposArray) {
+    const container = document.getElementById("language-stats");
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    const { stats, total } = getLanguageStats(reposArray);
+
+    if (total === 0) {
+        container.innerHTML = `
+            <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 16px;">Languages</h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted);">No language data available.</p>
+        `;
+        return;
+    }
+
+    const heading = document.createElement("h3");
+    heading.textContent = "Languages";
+    heading.style.fontSize = "1.15rem";
+    heading.style.fontWeight = "700";
+    heading.style.marginBottom = "16px";
+    container.appendChild(heading);
+
+    const listContainer = document.createElement("div");
+    listContainer.style.display = "flex";
+    listContainer.style.flexDirection = "column";
+    listContainer.style.gap = "14px";
+
+    stats.forEach(stat => {
+        const item = document.createElement("div");
+        item.style.display = "flex";
+        item.style.flexDirection = "column";
+        item.style.gap = "6px";
+
+        const info = document.createElement("div");
+        info.style.display = "flex";
+        info.style.justifyContent = "space-between";
+        info.style.fontSize = "0.85rem";
+        info.style.fontWeight = "600";
+        
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = stat.language;
+        
+        const pctSpan = document.createElement("span");
+        pctSpan.textContent = `${stat.percentage.toFixed(1)}%`;
+        pctSpan.style.color = "var(--text-muted)";
+
+        info.appendChild(nameSpan);
+        info.appendChild(pctSpan);
+
+        const track = document.createElement("div");
+        track.style.width = "100%";
+        track.style.height = "8px";
+        track.style.backgroundColor = "var(--border-color)";
+        track.style.borderRadius = "4px";
+        track.style.overflow = "hidden";
+
+        const fill = document.createElement("div");
+        fill.style.width = `${stat.percentage}%`;
+        fill.style.height = "100%";
+        fill.style.backgroundColor = "var(--primary-color)";
+        fill.style.borderRadius = "4px";
+        fill.style.transition = "width 0.6s ease-in-out";
+
+        track.appendChild(fill);
+        item.appendChild(info);
+        item.appendChild(track);
+        listContainer.appendChild(item);
+    });
+
+    container.appendChild(listContainer);
 }
