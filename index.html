@@ -11,6 +11,7 @@
     <header class="main-header">
         <div class="header-container">
             <h1 class="logo">DevExplorer.</h1>
+            
             <form id="search-form" class="search-form">
                 <input type="text" id="username-input" placeholder="Enter GitHub username..." required />
                 <button type="submit" class="btn">Search</button>
@@ -19,17 +20,16 @@
     </header>
 
     <main class="main-content">
-        <!-- Spinner placeholder -->
-        <div id="loading-spinner" class="loading-spinner"></div>
+        <div id="error-display" class="error-display" style="display: none;"></div>
+        <div id="loading-spinner" class="loading-spinner" style="display: none;"></div>
         
         <div class="grid-layout">
-            <!-- Sidebar: Profile & Language Stats -->
+            
             <div class="sidebar-grid">
                 <div id="profile-card" class="card"></div>
                 <div id="language-stats" class="card"></div>
             </div>
 
-            <!-- Repositories List with Sorting -->
             <div class="repos-grid">
                 <div class="repos-header">
                     <h2>Repositories</h2>
@@ -42,8 +42,9 @@
                         </select>
                     </div>
                 </div>
-                <div id="repo-list"></div>
+                <div id="repo-list" class="repo-list"></div>
             </div>
+            
         </div>
     </main>
 </body>
