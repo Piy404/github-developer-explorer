@@ -27,3 +27,59 @@ async function fetchGitHubData(username) {
         throw error;
     }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    const searchForm = document.getElementById("search-form");
+    const usernameInput = document.getElementById("username-input");
+    const loadingSpinner = document.getElementById("loading-spinner");
+    const errorDisplay = document.getElementById("error-display");
+    const profileContainer = document.getElementById("profile-container");
+
+    if (searchForm) {
+        searchForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            const username = usernameInput.value.trim();
+            if (username === "") return;
+
+            // Clear previous UI states
+            if (errorDisplay) {
+                errorDisplay.style.display = "none";
+                errorDisplay.textContent = "";
+            }
+            if (profileContainer) {
+                profileContainer.innerHTML = "";
+            }
+
+            // Show loading spinner
+            if (loadingSpinner) {
+                loadingSpinner.style.display = "block";
+            }
+
+            try {
+                const data = await fetchGitHubData(username);
+                console.log("GitHub data loaded successfully:", data);
+                
+                // Show simple success message
+                if (profileContainer) {
+                    profileContainer.innerHTML = `
+                        <div class="success-message" style="text-align: center; padding: 20px; font-weight: 500; color: #1a7f37;">
+                            Successfully fetched developer details for @${data.user.login} (${data.repos.length} repositories)!
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error("Fetch failed:", error);
+                if (errorDisplay) {
+                    errorDisplay.textContent = error.message || "An unexpected error occurred.";
+                    errorDisplay.style.display = "block";
+                }
+            } finally {
+                // Hide loading spinner
+                if (loadingSpinner) {
+                    loadingSpinner.style.display = "none";
+                }
+            }
+        });
+    }
+});
