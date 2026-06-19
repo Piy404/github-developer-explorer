@@ -53,6 +53,10 @@ document.addEventListener("DOMContentLoaded", () => {
             if (profileCard) {
                 profileCard.innerHTML = "";
             }
+            const languageStats = document.getElementById("language-stats");
+            if (languageStats) {
+                languageStats.innerHTML = "";
+            }
             
             // Also clear repository list
             const repoList = document.getElementById("repo-list");
@@ -72,6 +76,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 renderProfile(data.user);
                 currentRepos = data.repos;
                 sortAndRenderRepos();
+                renderLanguageStats(data.repos);
             } catch (error) {
                 console.error("Fetch failed:", error);
                 if (errorDisplay) {
@@ -238,4 +243,81 @@ function getLanguageStats(reposArray) {
     });
 
     return { stats, total };
+}
+
+/**
+ * Renders the language breakdown stats inside #language-stats
+ * @param {Array} reposArray - Array of repository objects
+ */
+function renderLanguageStats(reposArray) {
+    const container = document.getElementById("language-stats");
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    const { stats, total } = getLanguageStats(reposArray);
+
+    if (total === 0) {
+        container.innerHTML = `
+            <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 16px;">Languages</h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted);">No language data available.</p>
+        `;
+        return;
+    }
+
+    const heading = document.createElement("h3");
+    heading.textContent = "Languages";
+    heading.style.fontSize = "1.15rem";
+    heading.style.fontWeight = "700";
+    heading.style.marginBottom = "16px";
+    container.appendChild(heading);
+
+    const listContainer = document.createElement("div");
+    listContainer.style.display = "flex";
+    listContainer.style.flexDirection = "column";
+    listContainer.style.gap = "14px";
+
+    stats.forEach(stat => {
+        const item = document.createElement("div");
+        item.style.display = "flex";
+        item.style.flexDirection = "column";
+        item.style.gap = "6px";
+
+        const info = document.createElement("div");
+        info.style.display = "flex";
+        info.style.justifyContent = "space-between";
+        info.style.fontSize = "0.85rem";
+        info.style.fontWeight = "600";
+        
+        const nameSpan = document.createElement("span");
+        nameSpan.textContent = stat.language;
+        
+        const pctSpan = document.createElement("span");
+        pctSpan.textContent = `${stat.percentage.toFixed(1)}%`;
+        pctSpan.style.color = "var(--text-muted)";
+
+        info.appendChild(nameSpan);
+        info.appendChild(pctSpan);
+
+        const track = document.createElement("div");
+        track.style.width = "100%";
+        track.style.height = "8px";
+        track.style.backgroundColor = "var(--border-color)";
+        track.style.borderRadius = "4px";
+        track.style.overflow = "hidden";
+
+        const fill = document.createElement("div");
+        fill.style.width = `${stat.percentage}%`;
+        fill.style.height = "100%";
+        fill.style.backgroundColor = "var(--primary-color)";
+        fill.style.borderRadius = "4px";
+        fill.style.transition = "width 0.6s ease-in-out";
+
+        track.appendChild(fill);
+        item.appendChild(info);
+        item.appendChild(track);
+        listContainer.appendChild(item);
+    });
+
+    container.appendChild(listContainer);
 }
