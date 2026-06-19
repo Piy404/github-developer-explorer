@@ -30,13 +30,17 @@
                 <div id="language-stats" class="card"></div>
             </div>
 
-            <div class="content-grid">
-                <div class="sort-controls">
-                    <select id="sort-dropdown">
-                        <option value="stars">Highest Stars</option>
-                        <option value="forks">Highest Forks</option>
-                        <option value="recent">Recently Updated</option>
-                    </select>
+            <div class="repos-grid">
+                <div class="repos-header">
+                    <h2>Repositories</h2>
+                    <div class="sort-container">
+                        <label for="sort-select">Sort by:</label>
+                        <select id="sort-select" class="select-dropdown">
+                            <option value="stars">Stars</option>
+                            <option value="forks">Forks</option>
+                            <option value="recent">Recent</option>
+                        </select>
+                    </div>
                 </div>
                 <div id="repo-list" class="repo-list"></div>
             </div>
