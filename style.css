@@ -9,6 +9,10 @@
     --primary-hover: #1d4ed8; /* Blue 700 */
     --border-color: #e2e8f0; /* Slate 200 */
     
+    /* Error colors from API Fetch branch */
+    --error-color: #cf222e;
+    --error-bg: #ffebe9;
+    
     --font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     --max-width: 1200px;
     --transition: all 0.2s ease;
@@ -189,7 +193,6 @@ body {
 
 /* CSS-Only Loading Spinner */
 .loading-spinner {
-    display: none; /* Hidden by default */
     width: 40px;
     height: 40px;
     border: 4px solid var(--border-color);
@@ -202,6 +205,18 @@ body {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* Error Display (From Feature Branch) */
+.error-display {
+    background-color: var(--error-bg);
+    color: var(--error-color);
+    border: 1px solid rgba(207, 34, 46, 0.2);
+    padding: 16px;
+    border-radius: var(--border-radius);
+    text-align: center;
+    font-weight: 500;
+    margin-bottom: 20px;
 }
 
 /* Desktop Side-by-Side View */
