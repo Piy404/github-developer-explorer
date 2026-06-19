@@ -200,3 +200,18 @@ function sortAndRenderRepos() {
 
     renderRepos(currentRepos);
 }
+
+/**
+ * Calculates the language frequencies in a repositories array
+ * @param {Array} reposArray - Array of repository objects
+ * @returns {Object} Language frequency tallies
+ */
+function calculateLanguages(reposArray) {
+    const languageCounts = reposArray.reduce((acc, repo) => {
+        if (repo.language) {
+            acc[repo.language] = (acc[repo.language] || 0) + 1;
+        }
+        return acc;
+    }, {});
+    return languageCounts;
+}
